@@ -43,6 +43,9 @@ struct DashboardView: View {
         .padding()
         .background(FintechTheme.cardGradient(index: 0))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Total balance, \(viewModel.balance.formatted)")
+        .accessibilityHint("Account balance from offline SwiftData cache")
     }
 
     private var spendingSection: some View {
@@ -66,18 +69,29 @@ struct DashboardView: View {
                 ProgressView().tint(FintechTheme.accent)
             }
             ForEach(viewModel.transactions, id: \.id) { tx in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(tx.title).foregroundStyle(FintechTheme.textPrimary)
-                        Text(tx.category).font(.caption).foregroundStyle(FintechTheme.textSecondary)
-                    }
-                    Spacer()
-                    Text((tx.isDebit ? "-" : "+") + Money(amount: tx.amount, currencyCode: tx.currencyCode).formatted)
-                        .foregroundStyle(tx.isDebit ? FintechTheme.textPrimary : FintechTheme.accent)
-                }
-                .padding(.vertical, 8)
-                Divider().overlay(Color.white.opacity(0.1))
+                transactionRow(tx)
             }
+        }
+        .accessibilityLabel("Recent transactions")
+    }
+
+    private func transactionRow(_ tx: TransactionRecord) -> some View {
+        let amountText = (tx.isDebit ? "Debit" : "Credit") + ", " +
+            Money(amount: tx.amount, currencyCode: tx.currencyCode).formatted
+        return HStack {
+            VStack(alignment: .leading) {
+                Text(tx.title).foregroundStyle(FintechTheme.textPrimary)
+                Text(tx.category).font(.caption).foregroundStyle(FintechTheme.textSecondary)
+            }
+            Spacer()
+            Text((tx.isDebit ? "-" : "+") + Money(amount: tx.amount, currencyCode: tx.currencyCode).formatted)
+                .foregroundStyle(tx.isDebit ? FintechTheme.textPrimary : FintechTheme.accent)
+        }
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(tx.title), \(tx.category), \(amountText)")
+        .overlay(alignment: .bottom) {
+            Divider().overlay(Color.white.opacity(0.1))
         }
     }
 }
