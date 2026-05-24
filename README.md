@@ -1,8 +1,15 @@
 # PulseLedger
 
-![iOS CI](https://github.com/deepak4u2006/PulseLedger/actions/workflows/ios.yml/badge.svg)
+Flagship portfolio host app showcasing iOS architecture patterns through local Swift packages and a full mock neobank user journey.
 
-Personal finance dashboard — mock API, staggered loading, **Combine** + **async/await**, MVVM.
+## User journey
+
+1. **Launch** → Welcome (login / signup)
+2. **Auth (MVVM-C)** → Email → PIN (Keychain) → Face ID opt-in → Lottie success
+3. **Biometric unlock** → `LAContext` gate when enabled
+4. **Home (MVVM)** → Staggered mock API dashboard, magnetic card carousel, UIKit category chart
+5. **Transaction detail (VIP)** → Tap any row for formatted detail
+6. **Notifications** → Local alert on credit/income stream events
 
 PulseLedger simulates a banking home API with **realistic latency, skeleton loading,** and incremental transaction streaming—balance
 and weekly spend are derived from the ledger, with **Combine** for connectivity/streaming and **async/await for parallel endpoint fetches**.
@@ -11,71 +18,94 @@ and weekly spend are derived from the ledger, with **Combine** for connectivity/
 
 ```mermaid
 flowchart TB
-    subgraph presentation [Presentation]
-        DV[DashboardView]
-        DVM[DashboardViewModel]
-        SK[SkeletonView]
+    subgraph Host["PulseLedger (host)"]
+        App[PulseLedgerApp]
+        Root[RootView / AppCoordinator]
     end
-    subgraph domain [Domain]
-        M[Money / MoneyMath]
-        FC[FinanceCalculator]
-        T[Transaction]
+
+    subgraph Auth["PulseAuth — MVVM-C"]
+        AC[AuthCoordinator]
+        VM[ViewModels per step]
     end
-    subgraph data [Data]
-        JSON[(mock_data.json)]
-        MDL[MockDataLoader]
+
+    subgraph Home["PulseTransactions — MVVM + VIP"]
+        DV[DashboardView + ViewModel]
+        VIP[TransactionDetail VIP]
+    end
+
+    subgraph Core["PulseCore"]
         API[MockAPIClient]
+        Calc[FinanceCalculator]
     end
-    subgraph services [Services]
-        NR[NetworkReachabilitySimulator]
+
+    subgraph Design["PulseDesign"]
+        Theme[FintechTheme]
+        Cards[MagneticCardCarousel]
     end
-    DV --> DVM
-    DVM --> API
-    DVM --> NR
-    API --> MDL
-    MDL --> JSON
-    DVM --> FC
-    FC --> T
-    DV --> SK
+
+    subgraph Infra["Infra packages"]
+        Net[PulseNetworking]
+        Sec[PulseSecurity]
+        Ntf[PulseNotify]
+        Brg[PulseBridge]
+    end
+
+    App --> Root
+    Root --> Auth
+    Root --> Sec
+    Auth --> Sec
+    Root --> DV
+    DV --> API
+    DV --> Net
+    DV --> Ntf
+    DV --> Brg
+    DV --> VIP
+    API --> Core
+    DV --> Design
+    Auth --> Design
 ```
 
-| Layer | Responsibility |
-|-------|----------------|
-| Presentation | SwiftUI, skeletons, `@MainActor` view model |
-| Domain | `Transaction`, `FinanceCalculator` (balance, weekly spend) |
-| Data | DTOs, `MockDataLoader`, `MockAPIClient` (simulated endpoints) |
-| Services | Offline simulation (`Combine` publisher) |
+## Packages
 
-## Concurrency map
+| Package | Responsibility |
+|---------|----------------|
+| **PulseCore** | `Money`, DTOs, `MockDataLoader`, `MockAPIClient`, `FinanceCalculator`, `mock_data.json` |
+| **PulseDesign** | `FintechTheme`, skeletons, offline banner, magnetic carousel, animations, haptics |
+| **PulseNetworking** | `NWPathMonitor` reachability + offline banner modifier |
+| **PulseSecurity** | Keychain, `BiometricGate`, `AuthSessionStore`, Secure Enclave stub |
+| **PulseNotify** | `PaymentNotificationCenter`, payment alert scheduling |
+| **PulseBridge** | UIKit `CategoryBarChartView` + SwiftUI bridge |
+| **PulseAuth** | Login/signup/PIN/biometrics — **MVVM-C** |
+| **PulseTransactions** | Dashboard **MVVM**, transaction detail **VIP** |
 
-| Concern | Technology |
-|---------|------------|
-| Simulated HTTP delay (balance, weekly, transaction start) | **async/await** (`Task.sleep`, `MockAPIClient`) |
-| Staggered transaction rows | **async/await** chunks + **Combine** `PassthroughSubject` → ViewModel sink |
-| Offline banner toggle | **Combine** (`$isOffline` → `isOfflinePublisher`) |
-| Parallel dashboard load | **async/await** `withTaskGroup` in `DashboardViewModel.load()` |
-| UI updates | **MainActor** (`@MainActor` view model, `.receive(on: DispatchQueue.main)`) |
+## Patterns
 
-## Mock API behaviour
+| Pattern | Where | Notes |
+|---------|-------|-------|
+| **MVVM-C** | `PulseAuth` | `AuthCoordinator` drives `AuthFlowStep` |
+| **MVVM** | `PulseTransactions` | `DashboardViewModel` + `DashboardView` |
+| **VIP** | `TransactionDetailVIP` | Interactor → Presenter → View, Router builds screen |
+| **Combine** | Dashboard | Offline publisher, transaction `PassthroughSubject` |
+| **async/await** | `MockAPIClient`, VIP interactor | Staggered loads, detail fetch delay |
 
-- Single file: `PulseLedger/Resources/mock_data.json` (accounts, categories, transactions).
-- `MockDataLoader` decodes JSON once per call.
-- `MockAPIClient` exposes three logical endpoints, each with a **1–2s** random delay:
-  - `fetchBalance()` — computed from opening balance + all transactions
-  - `fetchWeeklySpend()` — debits in the last 7 days
-  - `streamTransactions(into:)` — emits **1–2** rows every **300–500ms** after initial delay
-- Pull-to-refresh re-runs all endpoints.
-- Toolbar menu: **Simulate offline** (blocks refresh/load).
+## Third-party dependencies
 
-## Run
+Only **[lottie-ios](https://github.com/airbnb/lottie-ios)** (via `PulseAuth`) for auth success animation.
 
-1. `xcodegen generate` (if you changed `project.yml`)
-2. Open `PulseLedger.xcodeproj` → iPhone simulator → Run (⌘R)
-3. Tests: ⌘U
+## Build
 
-## Built with
+```bash
+xcodegen generate
+xcodebuild -project PulseLedger.xcodeproj -scheme PulseLedger \
+  -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.5' build
+```
 
-Scaffolded with Cursor AI; mock API, loading UX, and tests reviewed for clarity.
+## CI
 
----
-*Fintech-inspired UI — not affiliated with Revolut Ltd.*
+GitHub Actions workflow may need updating for local SPM packages and Lottie resolution — **fix pending**.
+
+## Regenerate project
+
+```bash
+xcodegen generate
+```
