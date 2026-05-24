@@ -7,25 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07D43DF024DB0092B256C5F1 /* FintechTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3F132C974F4C13297151F6 /* FintechTheme.swift */; };
-		29C1894D1FB3077D395FE236 /* MockDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92A214649AB3CC881DB33C1 /* MockDataLoader.swift */; };
-		29DB65CFDD8770D7F49C45B2 /* OfflineBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C2E9A6480D9459E7EB6B /* OfflineBanner.swift */; };
-		2FC0EA49501E31DB320B8FB8 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FE33C0B535383D2DFC92C6 /* Transaction.swift */; };
+		07111FF8FE83C53703458E84 /* PulseNotify in Frameworks */ = {isa = PBXBuildFile; productRef = F943D7428B8E9FEEB36EBF2D /* PulseNotify */; };
+		14973349EAD7352B35A8E352 /* PulseSecurity in Frameworks */ = {isa = PBXBuildFile; productRef = 5C45371255ACEBC91BABAD68 /* PulseSecurity */; };
 		30715E35AE1CB16E4DD27D99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CBFB20F0C1DF2F4A245794 /* Assets.xcassets */; };
+		31FEA4926F32D748BD5AA05D /* BiometricUnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C443498C745F70B0DC6E325D /* BiometricUnlockView.swift */; };
 		343EBC855292567B582B3C6F /* PulseLedgerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02C063504B7EBBE6070EAA5 /* PulseLedgerTests.swift */; };
+		4370C71423034061215443F0 /* PulseNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 84D6AA4C006D3465610721AA /* PulseNetworking */; };
 		4DA6E24BA8F995E2181E4A2B /* PulseLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9654E1B267364803C1ED0A02 /* PulseLedgerApp.swift */; };
-		676A8F31A911095810C39831 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CBF0B399AED6D3A88F73A /* Money.swift */; };
-		7AAF64EA97FA2796CEB24C4C /* NetworkReachabilitySimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B85A53F34FB7CFE4FA8B123 /* NetworkReachabilitySimulator.swift */; };
-		7CC52CA69ACBF77FC90377CC /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF0C7E8D1AE037BED4E9436 /* TransactionRepository.swift */; };
-		9A406AB5EF8FFA3685B9A8A7 /* FinanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1C0E2BE9C8015A66A4DC01 /* FinanceCalculator.swift */; };
-		9A6A8D423E67EA1123D12E81 /* TransactionAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D756DC11EDE11C00D089E88 /* TransactionAPIService.swift */; };
-		9AE73BEDDA02A930DE394C4E /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFEEC37C0049A3E16169C26 /* DashboardView.swift */; };
-		A00E61974A7D1523C27490B8 /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A86D7FAF02F5C9BBAEB643 /* MockAPIClient.swift */; };
-		AF085D753F9BD3FA5496AE90 /* TransactionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B37A263D2F1CB3235EE3944 /* TransactionRecord.swift */; };
-		B8E0F0F53B8AB9B6E9426649 /* MockDataDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220D477300B5A62752E8A25 /* MockDataDTO.swift */; };
-		F3756B2CA32A7442A7624C8F /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBECB5D1D81D18FE2B094C26 /* SkeletonView.swift */; };
+		5FBD11948C02F101DB1DEEED /* PulseCore in Frameworks */ = {isa = PBXBuildFile; productRef = BDA2D4FEB46DBE9CAFF08565 /* PulseCore */; };
+		6ADD6C8A0C3626FA7C6AFF3D /* PulseCore in Frameworks */ = {isa = PBXBuildFile; productRef = DD9CF547D37F4298E6A12EA6 /* PulseCore */; };
+		7166FC466073861C882B5D4B /* PulseTransactions in Frameworks */ = {isa = PBXBuildFile; productRef = 0B9FAF9A848DBB7D76715925 /* PulseTransactions */; };
+		724D5E4E6F02861F4EB4683D /* PulseSecurity in Frameworks */ = {isa = PBXBuildFile; productRef = E5CA09FB75A0B3B8D1492F2D /* PulseSecurity */; };
+		82403E80D01D22FAE316D27F /* PulseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 82D063C5DC285DD3805B11B5 /* PulseAuth */; };
+		A35213F7796DF41A1605A717 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6F8D7C8ED957AC796164F /* AppCoordinator.swift */; };
+		AD374F35839DCA466476C1A4 /* PulseDesign in Frameworks */ = {isa = PBXBuildFile; productRef = 02E6D8295F9D00FFED69C61C /* PulseDesign */; };
 		F65B803ED47ADB737971D621 /* mock_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A0B3C446478C5DE9F402C07 /* mock_data.json */; };
-		F66A3259DB38F1A099C8EFCF /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62821D96E4081B88A9E417E /* DashboardViewModel.swift */; };
+		F68CDC29E7A6B22BDD86984F /* PulseBridge in Frameworks */ = {isa = PBXBuildFile; productRef = 28D1634C5301E964D68684E4 /* PulseBridge */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,70 +36,84 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00A86D7FAF02F5C9BBAEB643 /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
-		05FE33C0B535383D2DFC92C6 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		0DFEEC37C0049A3E16169C26 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		1CAC1B5ED6A60C2B30710E20 /* PulseLedger.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PulseLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D3F132C974F4C13297151F6 /* FintechTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FintechTheme.swift; sourceTree = "<group>"; };
-		2B85A53F34FB7CFE4FA8B123 /* NetworkReachabilitySimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkReachabilitySimulator.swift; sourceTree = "<group>"; };
-		4525C2E9A6480D9459E7EB6B /* OfflineBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBanner.swift; sourceTree = "<group>"; };
+		2BBB3C75BEAEC9AAD5EE4250 /* PulseBridge */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseBridge; path = Packages/PulseBridge; sourceTree = SOURCE_ROOT; };
 		5B028FD668F23EF3EEE85614 /* PulseLedgerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PulseLedgerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		691424C0BAAFB1B6EBCE904E /* PulseTransactions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseTransactions; path = Packages/PulseTransactions; sourceTree = SOURCE_ROOT; };
 		84CBFB20F0C1DF2F4A245794 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8D756DC11EDE11C00D089E88 /* TransactionAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionAPIService.swift; sourceTree = "<group>"; };
-		8FF0C7E8D1AE037BED4E9436 /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
+		8AA6F8D7C8ED957AC796164F /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		8D3DD67CB0E7AFE47AF2E0FA /* PulseNotify */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseNotify; path = Packages/PulseNotify; sourceTree = SOURCE_ROOT; };
 		9654E1B267364803C1ED0A02 /* PulseLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseLedgerApp.swift; sourceTree = "<group>"; };
 		9A0B3C446478C5DE9F402C07 /* mock_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mock_data.json; sourceTree = "<group>"; };
-		9B37A263D2F1CB3235EE3944 /* TransactionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRecord.swift; sourceTree = "<group>"; };
-		9E1C0E2BE9C8015A66A4DC01 /* FinanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalculator.swift; sourceTree = "<group>"; };
-		9E2CBF0B399AED6D3A88F73A /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
+		A474CCC6B89B27A962C2C5E6 /* PulseSecurity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseSecurity; path = Packages/PulseSecurity; sourceTree = SOURCE_ROOT; };
+		AC08F986C3C55BC03AE78085 /* PulseDesign */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseDesign; path = Packages/PulseDesign; sourceTree = SOURCE_ROOT; };
 		B02C063504B7EBBE6070EAA5 /* PulseLedgerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseLedgerTests.swift; sourceTree = "<group>"; };
-		B92A214649AB3CC881DB33C1 /* MockDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataLoader.swift; sourceTree = "<group>"; };
-		CBECB5D1D81D18FE2B094C26 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
-		E220D477300B5A62752E8A25 /* MockDataDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataDTO.swift; sourceTree = "<group>"; };
-		F62821D96E4081B88A9E417E /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		B73526A5182AD9042C20A46C /* PulseNetworking */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseNetworking; path = Packages/PulseNetworking; sourceTree = SOURCE_ROOT; };
+		C443498C745F70B0DC6E325D /* BiometricUnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricUnlockView.swift; sourceTree = "<group>"; };
+		C4991B81BBC35951F5036D30 /* PulseAuth */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseAuth; path = Packages/PulseAuth; sourceTree = SOURCE_ROOT; };
+		FF432B4016A1938232D7DBE2 /* PulseCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PulseCore; path = Packages/PulseCore; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		4985BDADA08913C82D847BF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ADD6C8A0C3626FA7C6AFF3D /* PulseCore in Frameworks */,
+				AD374F35839DCA466476C1A4 /* PulseDesign in Frameworks */,
+				4370C71423034061215443F0 /* PulseNetworking in Frameworks */,
+				14973349EAD7352B35A8E352 /* PulseSecurity in Frameworks */,
+				07111FF8FE83C53703458E84 /* PulseNotify in Frameworks */,
+				F68CDC29E7A6B22BDD86984F /* PulseBridge in Frameworks */,
+				82403E80D01D22FAE316D27F /* PulseAuth in Frameworks */,
+				7166FC466073861C882B5D4B /* PulseTransactions in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD6F1163C5EA72119E5FB83C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FBD11948C02F101DB1DEEED /* PulseCore in Frameworks */,
+				724D5E4E6F02861F4EB4683D /* PulseSecurity in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
-		2D8AF6F2F445C08469F54601 /* Models */ = {
+		4C4F91C5395F207680E2B412 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				9B37A263D2F1CB3235EE3944 /* TransactionRecord.swift */,
+				8AA6F8D7C8ED957AC796164F /* AppCoordinator.swift */,
+				C443498C745F70B0DC6E325D /* BiometricUnlockView.swift */,
 			);
-			path = Models;
+			path = App;
 			sourceTree = "<group>";
 		};
 		571EA01AB63D597661799B11 = {
 			isa = PBXGroup;
 			children = (
+				7DA3BC7EEA4820FA3C7A7250 /* Packages */,
 				F8D57D8E4E8941E2C552574D /* PulseLedger */,
 				E88E14478B868A62879B93BA /* PulseLedgerTests */,
 				915ED6A5B248E3DCF247C784 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		5FF5C752DA9177444F30B3ED /* Services */ = {
+		7DA3BC7EEA4820FA3C7A7250 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				2B85A53F34FB7CFE4FA8B123 /* NetworkReachabilitySimulator.swift */,
+				C4991B81BBC35951F5036D30 /* PulseAuth */,
+				2BBB3C75BEAEC9AAD5EE4250 /* PulseBridge */,
+				FF432B4016A1938232D7DBE2 /* PulseCore */,
+				AC08F986C3C55BC03AE78085 /* PulseDesign */,
+				B73526A5182AD9042C20A46C /* PulseNetworking */,
+				8D3DD67CB0E7AFE47AF2E0FA /* PulseNotify */,
+				A474CCC6B89B27A962C2C5E6 /* PulseSecurity */,
+				691424C0BAAFB1B6EBCE904E /* PulseTransactions */,
 			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		6B91C7235026E99E1DED2F6B /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				4525C2E9A6480D9459E7EB6B /* OfflineBanner.swift */,
-				CBECB5D1D81D18FE2B094C26 /* SkeletonView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		707B9E1BC53FA945D4ECFF09 /* DTOs */ = {
-			isa = PBXGroup;
-			children = (
-				E220D477300B5A62752E8A25 /* MockDataDTO.swift */,
-			);
-			path = DTOs;
+			path = Packages;
 			sourceTree = "<group>";
 		};
 		915ED6A5B248E3DCF247C784 /* Products */ = {
@@ -112,37 +123,6 @@
 				5B028FD668F23EF3EEE85614 /* PulseLedgerTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9DAE85E9881B7D031BA55F4B /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-				0DFEEC37C0049A3E16169C26 /* DashboardView.swift */,
-				F62821D96E4081B88A9E417E /* DashboardViewModel.swift */,
-				6B91C7235026E99E1DED2F6B /* Components */,
-			);
-			path = Presentation;
-			sourceTree = "<group>";
-		};
-		A2B117275B8002CBF3430785 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				00A86D7FAF02F5C9BBAEB643 /* MockAPIClient.swift */,
-				B92A214649AB3CC881DB33C1 /* MockDataLoader.swift */,
-				8D756DC11EDE11C00D089E88 /* TransactionAPIService.swift */,
-				8FF0C7E8D1AE037BED4E9436 /* TransactionRepository.swift */,
-				707B9E1BC53FA945D4ECFF09 /* DTOs */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		C5DD7BAAC0C011095B1DD4E9 /* Domain */ = {
-			isa = PBXGroup;
-			children = (
-				9E1C0E2BE9C8015A66A4DC01 /* FinanceCalculator.swift */,
-				05FE33C0B535383D2DFC92C6 /* Transaction.swift */,
-			);
-			path = Domain;
 			sourceTree = "<group>";
 		};
 		CD5F11E0C15229C1144382F3 /* Resources */ = {
@@ -165,15 +145,9 @@
 			isa = PBXGroup;
 			children = (
 				84CBFB20F0C1DF2F4A245794 /* Assets.xcassets */,
-				1D3F132C974F4C13297151F6 /* FintechTheme.swift */,
-				9E2CBF0B399AED6D3A88F73A /* Money.swift */,
 				9654E1B267364803C1ED0A02 /* PulseLedgerApp.swift */,
-				A2B117275B8002CBF3430785 /* Data */,
-				C5DD7BAAC0C011095B1DD4E9 /* Domain */,
-				2D8AF6F2F445C08469F54601 /* Models */,
-				9DAE85E9881B7D031BA55F4B /* Presentation */,
+				4C4F91C5395F207680E2B412 /* App */,
 				CD5F11E0C15229C1144382F3 /* Resources */,
-				5FF5C752DA9177444F30B3ED /* Services */,
 			);
 			path = PulseLedger;
 			sourceTree = "<group>";
@@ -187,6 +161,7 @@
 			buildPhases = (
 				923C7512A84813729E49E9EC /* Sources */,
 				F6F64A149052485203E2781C /* Resources */,
+				4985BDADA08913C82D847BF5 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -194,6 +169,14 @@
 			);
 			name = PulseLedger;
 			packageProductDependencies = (
+				DD9CF547D37F4298E6A12EA6 /* PulseCore */,
+				02E6D8295F9D00FFED69C61C /* PulseDesign */,
+				84D6AA4C006D3465610721AA /* PulseNetworking */,
+				5C45371255ACEBC91BABAD68 /* PulseSecurity */,
+				F943D7428B8E9FEEB36EBF2D /* PulseNotify */,
+				28D1634C5301E964D68684E4 /* PulseBridge */,
+				82D063C5DC285DD3805B11B5 /* PulseAuth */,
+				0B9FAF9A848DBB7D76715925 /* PulseTransactions */,
 			);
 			productName = PulseLedger;
 			productReference = 1CAC1B5ED6A60C2B30710E20 /* PulseLedger.app */;
@@ -204,6 +187,7 @@
 			buildConfigurationList = 35F01CD81B76F527D8EB5AAA /* Build configuration list for PBXNativeTarget "PulseLedgerTests" */;
 			buildPhases = (
 				8563CBA23B45E4EA7BB5F132 /* Sources */,
+				BD6F1163C5EA72119E5FB83C /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -212,6 +196,8 @@
 			);
 			name = PulseLedgerTests;
 			packageProductDependencies = (
+				BDA2D4FEB46DBE9CAFF08565 /* PulseCore */,
+				E5CA09FB75A0B3B8D1492F2D /* PulseSecurity */,
 			);
 			productName = PulseLedgerTests;
 			productReference = 5B028FD668F23EF3EEE85614 /* PulseLedgerTests.xctest */;
@@ -245,6 +231,17 @@
 			);
 			mainGroup = 571EA01AB63D597661799B11;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A811AA3A1BE28BD89D394E5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				12EC86929F08082FA0724933 /* XCLocalSwiftPackageReference "Packages/PulseAuth" */,
+				9886C034BC02C233807E9386 /* XCLocalSwiftPackageReference "Packages/PulseBridge" */,
+				FB2CFAF36767DE43C5C020C5 /* XCLocalSwiftPackageReference "Packages/PulseCore" */,
+				561B6724A485CBD31872084F /* XCLocalSwiftPackageReference "Packages/PulseDesign" */,
+				3AFBD7D1BE2A05443DC3DFE9 /* XCLocalSwiftPackageReference "Packages/PulseNetworking" */,
+				B9254DCC69156459B3FBAEAC /* XCLocalSwiftPackageReference "Packages/PulseNotify" */,
+				167939E17FCF393D59134381 /* XCLocalSwiftPackageReference "Packages/PulseSecurity" */,
+				D70E24212AB8EB8B05DFA209 /* XCLocalSwiftPackageReference "Packages/PulseTransactions" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 915ED6A5B248E3DCF247C784 /* Products */;
 			projectDirPath = "";
@@ -281,22 +278,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AE73BEDDA02A930DE394C4E /* DashboardView.swift in Sources */,
-				F66A3259DB38F1A099C8EFCF /* DashboardViewModel.swift in Sources */,
-				9A406AB5EF8FFA3685B9A8A7 /* FinanceCalculator.swift in Sources */,
-				07D43DF024DB0092B256C5F1 /* FintechTheme.swift in Sources */,
-				A00E61974A7D1523C27490B8 /* MockAPIClient.swift in Sources */,
-				B8E0F0F53B8AB9B6E9426649 /* MockDataDTO.swift in Sources */,
-				29C1894D1FB3077D395FE236 /* MockDataLoader.swift in Sources */,
-				676A8F31A911095810C39831 /* Money.swift in Sources */,
-				7AAF64EA97FA2796CEB24C4C /* NetworkReachabilitySimulator.swift in Sources */,
-				29DB65CFDD8770D7F49C45B2 /* OfflineBanner.swift in Sources */,
+				A35213F7796DF41A1605A717 /* AppCoordinator.swift in Sources */,
+				31FEA4926F32D748BD5AA05D /* BiometricUnlockView.swift in Sources */,
 				4DA6E24BA8F995E2181E4A2B /* PulseLedgerApp.swift in Sources */,
-				F3756B2CA32A7442A7624C8F /* SkeletonView.swift in Sources */,
-				2FC0EA49501E31DB320B8FB8 /* Transaction.swift in Sources */,
-				9A6A8D423E67EA1123D12E81 /* TransactionAPIService.swift in Sources */,
-				AF085D753F9BD3FA5496AE90 /* TransactionRecord.swift in Sources */,
-				7CC52CA69ACBF77FC90377CC /* TransactionRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +301,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "PulseLedger uses Face ID to unlock your dashboard.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -393,6 +378,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "PulseLedger uses Face ID to unlock your dashboard.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -535,6 +521,95 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		12EC86929F08082FA0724933 /* XCLocalSwiftPackageReference "Packages/PulseAuth" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseAuth;
+		};
+		167939E17FCF393D59134381 /* XCLocalSwiftPackageReference "Packages/PulseSecurity" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseSecurity;
+		};
+		3AFBD7D1BE2A05443DC3DFE9 /* XCLocalSwiftPackageReference "Packages/PulseNetworking" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseNetworking;
+		};
+		561B6724A485CBD31872084F /* XCLocalSwiftPackageReference "Packages/PulseDesign" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseDesign;
+		};
+		9886C034BC02C233807E9386 /* XCLocalSwiftPackageReference "Packages/PulseBridge" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseBridge;
+		};
+		B9254DCC69156459B3FBAEAC /* XCLocalSwiftPackageReference "Packages/PulseNotify" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseNotify;
+		};
+		D70E24212AB8EB8B05DFA209 /* XCLocalSwiftPackageReference "Packages/PulseTransactions" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseTransactions;
+		};
+		FB2CFAF36767DE43C5C020C5 /* XCLocalSwiftPackageReference "Packages/PulseCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PulseCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A811AA3A1BE28BD89D394E5C /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		02E6D8295F9D00FFED69C61C /* PulseDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseDesign;
+		};
+		0B9FAF9A848DBB7D76715925 /* PulseTransactions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseTransactions;
+		};
+		28D1634C5301E964D68684E4 /* PulseBridge */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseBridge;
+		};
+		5C45371255ACEBC91BABAD68 /* PulseSecurity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseSecurity;
+		};
+		82D063C5DC285DD3805B11B5 /* PulseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseAuth;
+		};
+		84D6AA4C006D3465610721AA /* PulseNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseNetworking;
+		};
+		BDA2D4FEB46DBE9CAFF08565 /* PulseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseCore;
+		};
+		DD9CF547D37F4298E6A12EA6 /* PulseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseCore;
+		};
+		E5CA09FB75A0B3B8D1492F2D /* PulseSecurity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseSecurity;
+		};
+		F943D7428B8E9FEEB36EBF2D /* PulseNotify */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PulseNotify;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3424E493AC545053C9410AFA /* Project object */;
 }
