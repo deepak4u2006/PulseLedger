@@ -28,8 +28,5 @@ struct BiometricUnlockView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(FintechTheme.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
-        .task {
-            await onUnlock()
-        }
     }
 }

@@ -153,9 +153,17 @@ final class PulseLedgerTests: XCTestCase {
         session.pin = "1234"
         session.isLoggedIn = true
         XCTAssertEqual(session.pin, "1234")
-        XCTAssertTrue(session.isLoggedIn)
+        XCTAssertTrue(session.hasValidSession)
         session.signOut()
         XCTAssertNil(session.pin)
+        XCTAssertFalse(session.hasValidSession)
+    }
+
+    func testAuthSessionStoreClearsStaleSessionWithoutPIN() {
+        let keychain = MockKeychain()
+        let session = AuthSessionStore(keychain: keychain)
+        session.isLoggedIn = true
+        XCTAssertFalse(session.hasValidSession)
         XCTAssertFalse(session.isLoggedIn)
     }
 }

@@ -12,7 +12,6 @@ public final class AuthCoordinator: ObservableObject {
 
     private let session: AuthSessionStore
     private let onComplete: () -> Void
-    private var isSignupFlow = false
 
     public init(session: AuthSessionStore = AuthSessionStore(), onComplete: @escaping () -> Void) {
         self.session = session
@@ -22,14 +21,12 @@ public final class AuthCoordinator: ObservableObject {
     public func showWelcome() { step = .welcome }
 
     public func startLogin() {
-        isSignupFlow = false
         emailDraft = session.email ?? ""
         step = .email(isSignup: false)
         PulseHaptics.light()
     }
 
     public func startSignup() {
-        isSignupFlow = true
         emailDraft = ""
         step = .email(isSignup: true)
         PulseHaptics.light()
@@ -84,13 +81,14 @@ public final class AuthCoordinator: ObservableObject {
         finishAuth()
     }
 
+    /// Called from success screen after Lottie (tap or 2s cap).
+    public func completeSuccessAnimation() {
+        onComplete()
+    }
+
     private func finishAuth() {
         session.isLoggedIn = true
         step = .success
         PulseHaptics.success()
-        Task {
-            try? await Task.sleep(nanoseconds: 1_800_000_000)
-            onComplete()
-        }
     }
 }

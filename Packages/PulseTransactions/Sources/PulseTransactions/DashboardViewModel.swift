@@ -14,6 +14,7 @@ public final class DashboardViewModel: ObservableObject {
     @Published public private(set) var isBalanceLoading = false
     @Published public private(set) var isWeeklyLoading = false
     @Published public private(set) var isTransactionsLoading = false
+    @Published public private(set) var isChartLoading = false
     @Published public private(set) var isOffline = false
     @Published public var selectedCardIndex = 0
     @Published public var showNotificationPrompt = false
@@ -26,6 +27,7 @@ public final class DashboardViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var loadTask: Task<Void, Never>?
     private var notifiedCreditIDs = Set<String>()
+    private var isInitialStreamLoad = false
 
     public init(
         api: TransactionAPIService = MockAPIClient(),
@@ -55,7 +57,9 @@ public final class DashboardViewModel: ObservableObject {
                 guard let self else { return }
                 guard !self.transactions.contains(where: { $0.id == transaction.id }) else { return }
                 self.transactions.append(transaction)
-                self.refreshCategorySpend()
+                if !self.isInitialStreamLoad {
+                    self.refreshCategorySpend()
+                }
                 if !transaction.isDebit {
                     Task { await self.handleCredit(transaction) }
                 }
@@ -80,8 +84,27 @@ public final class DashboardViewModel: ObservableObject {
         _ = await notifications.requestAuthorizationIfNeeded()
     }
 
+    public func requestNotificationPermission() async {
+        showNotificationPrompt = false
+        _ = await notifications.requestAuthorizationIfNeeded()
+    }
+
+    public func simulateTestNotification() async {
+        _ = await notifications.requestAuthorizationIfNeeded()
+        await notifications.schedulePaymentReceived(
+            title: "Demo Employer",
+            amount: Money(amount: 1250, currencyCode: balance.currencyCode).formatted
+        )
+    }
+
     public func refresh() async {
+        if let latestCredit = transactions.last(where: { !$0.isDebit }) {
+            notifiedCreditIDs.remove(latestCredit.id)
+        }
         await load()
+        if let latestCredit = transactions.last(where: { !$0.isDebit }) {
+            await handleCredit(latestCredit)
+        }
     }
 
     public func load() async {
@@ -89,9 +112,12 @@ public final class DashboardViewModel: ObservableObject {
 
         loadTask?.cancel()
         transactions = []
+        categorySpend = []
         isBalanceLoading = true
         isWeeklyLoading = true
         isTransactionsLoading = true
+        isChartLoading = true
+        isInitialStreamLoad = true
 
         loadTask = Task { [weak self] in
             guard let self else { return }
@@ -101,6 +127,9 @@ public final class DashboardViewModel: ObservableObject {
                 group.addTask { await self.fetchAccounts() }
                 group.addTask { await self.fetchTransactionsStaggered() }
             }
+            self.isInitialStreamLoad = false
+            self.refreshCategorySpend()
+            self.isChartLoading = false
         }
         await loadTask?.value
     }
@@ -109,7 +138,8 @@ public final class DashboardViewModel: ObservableObject {
         defer { isBalanceLoading = false }
         guard !Task.isCancelled else { return }
         do {
-            balance = try await api.fetchBalance()
+            let loaded = try await api.fetchBalance()
+            balance = loaded
         } catch {}
     }
 
@@ -132,7 +162,6 @@ public final class DashboardViewModel: ObservableObject {
         guard !Task.isCancelled else { return }
         do {
             try await api.streamTransactions(into: transactionSubject)
-            refreshCategorySpend()
         } catch {}
     }
 

@@ -5,6 +5,10 @@ public enum PulseHaptics {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 
+    public static func soft() {
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+    }
+
     public static func medium() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }

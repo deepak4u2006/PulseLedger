@@ -91,3 +91,26 @@ public struct TransactionRowSkeleton: View {
         .padding(.vertical, 8)
     }
 }
+
+public struct ChartCardSkeleton: View {
+    public init() {}
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SkeletonView(height: 14, cornerRadius: 6).frame(width: 140)
+            HStack(alignment: .bottom, spacing: 10) {
+                ForEach(0 ..< 4, id: \.self) { index in
+                    SkeletonView(
+                        height: CGFloat([48, 72, 36, 60][index]),
+                        cornerRadius: 6
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, minHeight: 140, alignment: .leading)
+        .background(FintechTheme.surface.opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}

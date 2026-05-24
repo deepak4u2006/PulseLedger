@@ -12,7 +12,6 @@ let package = Package(
         .package(path: "../PulseDesign"),
         .package(path: "../PulseNetworking"),
         .package(path: "../PulseNotify"),
-        .package(path: "../PulseBridge"),
     ],
     targets: [
         .target(
@@ -22,7 +21,6 @@ let package = Package(
                 "PulseDesign",
                 "PulseNetworking",
                 "PulseNotify",
-                "PulseBridge",
             ]
         ),
     ]

@@ -1,5 +1,6 @@
 import Lottie
 import PulseDesign
+import PulseSecurity
 import SwiftUI
 
 public struct AuthFlowView: View {
@@ -10,28 +11,32 @@ public struct AuthFlowView: View {
     }
 
     public var body: some View {
-        ZStack {
-            FintechTheme.background.ignoresSafeArea()
-            switch coordinator.step {
-            case .welcome:
-                WelcomeAuthView(viewModel: WelcomeViewModel(coordinator: coordinator))
-            case .email(let isSignup):
-                EmailAuthView(viewModel: EmailAuthViewModel(isSignup: isSignup, coordinator: coordinator))
-            case .pin:
-                PINAuthView(viewModel: PINAuthViewModel(coordinator: coordinator))
-            case .biometrics:
-                BiometricAuthView(viewModel: BiometricAuthViewModel(coordinator: coordinator))
-            case .success:
-                AuthSuccessView()
+        NavigationStack {
+            Group {
+                switch coordinator.step {
+                case .welcome:
+                    WelcomeAuthView(coordinator: coordinator)
+                case .email(let isSignup):
+                    EmailAuthView(coordinator: coordinator, isSignup: isSignup)
+                case .pin:
+                    PINAuthView(coordinator: coordinator)
+                case .biometrics:
+                    BiometricAuthView(coordinator: coordinator)
+                case .success:
+                    AuthSuccessView {
+                        coordinator.completeSuccessAnimation()
+                    }
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(FintechTheme.background)
         }
         .preferredColorScheme(.dark)
-        .animation(.spring(response: 0.45, dampingFraction: 0.86), value: coordinator.step)
     }
 }
 
 struct WelcomeAuthView: View {
-    @ObservedObject var viewModel: WelcomeViewModel
+    @ObservedObject var coordinator: AuthCoordinator
 
     var body: some View {
         VStack(spacing: 28) {
@@ -46,45 +51,51 @@ struct WelcomeAuthView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(FintechTheme.textSecondary)
             Spacer()
-            Button("Log in") { viewModel.loginTapped() }
+            Button("Log in") { coordinator.startLogin() }
                 .buttonStyle(FintechPrimaryButtonStyle())
-            Button("Sign up") { viewModel.signupTapped() }
+            Button("Sign up") { coordinator.startSignup() }
                 .foregroundStyle(FintechTheme.accent)
         }
         .padding(24)
+        .navigationBarHidden(true)
     }
 }
 
 struct EmailAuthView: View {
-    @ObservedObject var viewModel: EmailAuthViewModel
+    @ObservedObject var coordinator: AuthCoordinator
+    let isSignup: Bool
+    @FocusState private var emailFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(viewModel.isSignup ? "Create account" : "Welcome back")
+            Text(isSignup ? "Create account" : "Welcome back")
                 .font(.title.bold())
                 .foregroundStyle(FintechTheme.textPrimary)
-            TextField("Email", text: Binding(
-                get: { viewModel.email },
-                set: { viewModel.email = $0 }
-            ))
-            .textInputAutocapitalization(.never)
-            .keyboardType(.emailAddress)
-            .padding()
-            .background(FintechTheme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            if let error = viewModel.errorMessage {
+            TextField("Email", text: $coordinator.emailDraft)
+                .textInputAutocapitalization(.never)
+                .keyboardType(.emailAddress)
+                .textContentType(.emailAddress)
+                .autocorrectionDisabled()
+                .focused($emailFocused)
+                .padding()
+                .background(FintechTheme.surface)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            if let error = coordinator.errorMessage {
                 Text(error).font(.caption).foregroundStyle(FintechTheme.danger)
             }
-            Button("Continue") { viewModel.continueTapped() }
+            Button("Continue") { coordinator.submitEmail() }
                 .buttonStyle(FintechPrimaryButtonStyle())
             Spacer()
         }
         .padding(24)
+        .navigationTitle(isSignup ? "Sign up" : "Log in")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear { emailFocused = true }
     }
 }
 
 struct PINAuthView: View {
-    @ObservedObject var viewModel: PINAuthViewModel
+    @ObservedObject var coordinator: AuthCoordinator
     private let digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"]
 
     var body: some View {
@@ -95,11 +106,11 @@ struct PINAuthView: View {
             HStack(spacing: 12) {
                 ForEach(0 ..< 6, id: \.self) { index in
                     Circle()
-                        .fill(index < viewModel.pin.count ? FintechTheme.accent : FintechTheme.surface)
+                        .fill(index < coordinator.pinDraft.count ? FintechTheme.accent : FintechTheme.surface)
                         .frame(width: 14, height: 14)
                 }
             }
-            if let error = viewModel.errorMessage {
+            if let error = coordinator.errorMessage {
                 Text(error).font(.caption).foregroundStyle(FintechTheme.danger)
             }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 16) {
@@ -108,7 +119,11 @@ struct PINAuthView: View {
                         Color.clear.frame(height: 52)
                     } else {
                         Button {
-                            if digit == "⌫" { viewModel.delete() } else { viewModel.digit(digit) }
+                            if digit == "⌫" {
+                                coordinator.deletePinDigit()
+                            } else {
+                                coordinator.appendPinDigit(digit)
+                            }
                         } label: {
                             Text(digit)
                                 .font(.title2)
@@ -116,19 +131,23 @@ struct PINAuthView: View {
                                 .background(FintechTheme.surface)
                                 .clipShape(Circle())
                         }
+                        .buttonStyle(.plain)
                         .foregroundStyle(FintechTheme.textPrimary)
                     }
                 }
             }
-            Button("Continue") { viewModel.continueTapped() }
+            Button("Continue") { coordinator.submitPIN() }
                 .buttonStyle(FintechPrimaryButtonStyle())
         }
         .padding(24)
+        .navigationTitle("PIN")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 struct BiometricAuthView: View {
-    @ObservedObject var viewModel: BiometricAuthViewModel
+    @ObservedObject var coordinator: AuthCoordinator
+    private let gate = BiometricGate()
 
     var body: some View {
         VStack(spacing: 24) {
@@ -138,35 +157,44 @@ struct BiometricAuthView: View {
             Text("Enable Face ID?")
                 .font(.title2.bold())
                 .foregroundStyle(FintechTheme.textPrimary)
-            if viewModel.canUseBiometrics {
-                Toggle("Use biometrics to unlock", isOn: Binding(
-                    get: { viewModel.enableBiometrics },
-                    set: { viewModel.enableBiometrics = $0 }
-                ))
-                .tint(FintechTheme.accent)
+            if gate.isBiometricsAvailable {
+                Toggle("Use biometrics to unlock", isOn: $coordinator.enableBiometrics)
+                    .tint(FintechTheme.accent)
             } else {
                 Text("Biometrics unavailable on this device")
                     .font(.caption)
                     .foregroundStyle(FintechTheme.textSecondary)
             }
             Button("Continue") {
-                Task { await viewModel.enableAndContinue() }
+                Task { @MainActor in
+                    if coordinator.enableBiometrics, gate.isBiometricsAvailable {
+                        _ = await gate.authenticate(reason: "Enable Face ID for PulseLedger")
+                    }
+                    coordinator.confirmBiometrics()
+                }
             }
             .buttonStyle(FintechPrimaryButtonStyle())
-            Button("Not now") { viewModel.skip() }
+            Button("Not now") { coordinator.skipBiometrics() }
                 .foregroundStyle(FintechTheme.textSecondary)
         }
         .padding(24)
+        .navigationTitle("Biometrics")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 struct AuthSuccessView: View {
+    let onFinish: () -> Void
+    @State private var didFinish = false
+
     var body: some View {
         VStack(spacing: 20) {
             if let animation = LottieAnimation.named("success", bundle: .module) {
                 LottieView(animation: animation)
                     .playing(loopMode: .playOnce)
+                    .animationSpeed(1.2)
                     .frame(width: 160, height: 160)
+                    .allowsHitTesting(false)
             } else {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
@@ -175,6 +203,22 @@ struct AuthSuccessView: View {
             Text("You're in")
                 .font(.title.bold())
                 .foregroundStyle(FintechTheme.textPrimary)
+            Text("Tap to continue")
+                .font(.caption)
+                .foregroundStyle(FintechTheme.textSecondary)
         }
+        .contentShape(Rectangle())
+        .onTapGesture { finishOnce() }
+        .task {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            finishOnce()
+        }
+        .navigationBarHidden(true)
+    }
+
+    private func finishOnce() {
+        guard !didFinish else { return }
+        didFinish = true
+        onFinish()
     }
 }

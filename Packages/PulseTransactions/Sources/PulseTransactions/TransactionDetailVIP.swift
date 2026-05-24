@@ -31,7 +31,7 @@ public struct TransactionDetailDisplayModel: Equatable, Sendable {
 }
 
 public protocol TransactionDetailBusinessLogic: Sendable {
-    func load(request: TransactionDetailRequest) async -> PulseCore.Transaction
+    func load(request: TransactionDetailRequest) -> PulseCore.Transaction
 }
 
 public protocol TransactionDetailPresentationLogic: AnyObject, Sendable {
@@ -57,9 +57,8 @@ public struct TransactionDetailRequest: Sendable {
 public struct TransactionDetailInteractor: TransactionDetailBusinessLogic {
     public init() {}
 
-    public func load(request: TransactionDetailRequest) async -> PulseCore.Transaction {
-        try? await Task.sleep(nanoseconds: 150_000_000)
-        return request.transactions.first { $0.id == request.transactionID }
+    public func load(request: TransactionDetailRequest) -> PulseCore.Transaction {
+        request.transactions.first { $0.id == request.transactionID }
             ?? PulseCore.Transaction(
                 id: request.transactionID,
                 title: "Unknown",
@@ -157,18 +156,15 @@ public struct TransactionDetailView: View {
                     Spacer()
                 }
                 .padding(24)
-            } else {
-                ProgressView().tint(FintechTheme.accent)
             }
         }
         .navigationTitle("Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        .task {
-            let tx = await interactor.load(
-                request: TransactionDetailRequest(transactionID: transactionID, transactions: transactions)
-            )
-            presenter.present(transaction: tx)
+        .onAppear {
+            let request = TransactionDetailRequest(transactionID: transactionID, transactions: transactions)
+            let transaction = interactor.load(request: request)
+            presenter.present(transaction: transaction)
         }
     }
 
