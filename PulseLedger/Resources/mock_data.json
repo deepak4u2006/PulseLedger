@@ -1,0 +1,111 @@
+{
+  "accounts": [
+    {
+      "id": "acc-main",
+      "name": "Everyday",
+      "currencyCode": "EUR",
+      "openingBalance": 3200.00
+    }
+  ],
+  "categories": [
+    { "id": "cat-food", "name": "Food", "icon": "fork.knife" },
+    { "id": "cat-transport", "name": "Transport", "icon": "tram.fill" },
+    { "id": "cat-income", "name": "Income", "icon": "arrow.down.circle" },
+    { "id": "cat-shopping", "name": "Shopping", "icon": "bag.fill" },
+    { "id": "cat-bills", "name": "Bills", "icon": "doc.text.fill" },
+    { "id": "cat-savings", "name": "Savings", "icon": "building.columns.fill" },
+    { "id": "cat-entertainment", "name": "Entertainment", "icon": "film.fill" }
+  ],
+  "transactions": [
+    {
+      "id": "tx-001",
+      "title": "Salary",
+      "amount": 3200.00,
+      "currencyCode": "EUR",
+      "category": "Income",
+      "date": "2026-05-22T09:00:00Z",
+      "isDebit": false
+    },
+    {
+      "id": "tx-002",
+      "title": "Coffee Lab",
+      "amount": 4.50,
+      "currencyCode": "EUR",
+      "category": "Food",
+      "date": "2026-05-23T08:15:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-003",
+      "title": "Metro",
+      "amount": 2.40,
+      "currencyCode": "EUR",
+      "category": "Transport",
+      "date": "2026-05-23T17:30:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-004",
+      "title": "Transfer to Savings",
+      "amount": 500.00,
+      "currencyCode": "EUR",
+      "category": "Savings",
+      "date": "2026-05-21T14:00:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-005",
+      "title": "Grocery Store",
+      "amount": 67.80,
+      "currencyCode": "EUR",
+      "category": "Food",
+      "date": "2026-05-20T18:45:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-006",
+      "title": "Netflix",
+      "amount": 15.99,
+      "currencyCode": "EUR",
+      "category": "Entertainment",
+      "date": "2026-05-19T10:00:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-007",
+      "title": "Electric Bill",
+      "amount": 89.50,
+      "currencyCode": "EUR",
+      "category": "Bills",
+      "date": "2026-05-18T11:20:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-008",
+      "title": "Bookshop",
+      "amount": 24.00,
+      "currencyCode": "EUR",
+      "category": "Shopping",
+      "date": "2026-05-17T16:00:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-009",
+      "title": "Restaurant",
+      "amount": 42.30,
+      "currencyCode": "EUR",
+      "category": "Food",
+      "date": "2026-05-16T20:30:00Z",
+      "isDebit": true
+    },
+    {
+      "id": "tx-010",
+      "title": "Freelance Payment",
+      "amount": 450.00,
+      "currencyCode": "EUR",
+      "category": "Income",
+      "date": "2026-05-15T12:00:00Z",
+      "isDebit": false
+    }
+  ]
+}

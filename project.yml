@@ -16,6 +16,8 @@ targets:
     platform: iOS
     sources:
       - path: PulseLedger
+    resources:
+      - path: PulseLedger/Resources
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.deepak.portfolio.pulseledger
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -31,5 +33,9 @@ targets:
     platform: iOS
     sources:
       - path: PulseLedgerTests
+    resources:
+      - path: PulseLedger/Resources
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
     dependencies:
       - target: PulseLedger
