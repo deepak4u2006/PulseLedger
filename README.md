@@ -4,6 +4,9 @@
 
 Personal finance dashboard — mock API, staggered loading, **Combine** + **async/await**, MVVM.
 
+PulseLedger simulates a banking home API with **realistic latency, skeleton loading,** and incremental transaction streaming—balance
+and weekly spend are derived from the ledger, with **Combine** for connectivity/streaming and **async/await for parallel endpoint fetches**.
+
 ## Architecture
 
 ```mermaid
