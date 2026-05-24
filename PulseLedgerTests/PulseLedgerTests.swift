@@ -1,11 +1,10 @@
 import Combine
+import PulseCore
+import PulseSecurity
 import XCTest
 @testable import PulseLedger
 
 final class PulseLedgerTests: XCTestCase {
-    private var mockBundle: Bundle {
-        Bundle(for: MockDataLoader.self)
-    }
     // MARK: - Money
 
     func testMoneyFormattedUsesCurrencyCode() {
@@ -42,7 +41,7 @@ final class PulseLedgerTests: XCTestCase {
     // MARK: - Mock data loader
 
     func testMockDataLoaderLoadsBundleJSON() throws {
-        let loader = MockDataLoader(bundle: mockBundle)
+        let loader = MockDataLoader()
         let root = try loader.load()
         XCTAssertFalse(root.accounts.isEmpty)
         XCTAssertFalse(root.categories.isEmpty)
@@ -98,10 +97,24 @@ final class PulseLedgerTests: XCTestCase {
         XCTAssertEqual(spend?.amount, 10)
     }
 
+    func testCategorySpendGroupsDebits() {
+        let transactions = [
+            Transaction(id: "1", title: "A", amount: 10, currencyCode: "EUR", category: "Food", date: .now, isDebit: true),
+            Transaction(id: "2", title: "B", amount: 5, currencyCode: "EUR", category: "Food", date: .now, isDebit: true),
+            Transaction(id: "3", title: "C", amount: 20, currencyCode: "EUR", category: "Bills", date: .now, isDebit: true),
+        ]
+        let spend = FinanceCalculator.categorySpend(transactions: transactions)
+        XCTAssertEqual(spend.count, 2)
+        XCTAssertEqual(spend.first?.category, "Bills")
+        XCTAssertEqual(spend.first?.amount, 20)
+        XCTAssertEqual(spend.last?.category, "Food")
+        XCTAssertEqual(spend.last?.amount, 15)
+    }
+
     // MARK: - Mock API + Combine stream
 
     func testMockAPIClientStreamsTransactionsIncrementally() async throws {
-        let loader = MockDataLoader(bundle: mockBundle)
+        let loader = MockDataLoader()
         let client = MockAPIClient(
             loader: loader,
             delayRange: 0 ... 0,
@@ -121,7 +134,7 @@ final class PulseLedgerTests: XCTestCase {
     }
 
     func testMockAPIClientFetchBalanceMatchesCalculator() async throws {
-        let loader = MockDataLoader(bundle: mockBundle)
+        let loader = MockDataLoader()
         let client = MockAPIClient(loader: loader, delayRange: 0 ... 0, chunkDelayRange: 0 ... 0)
         let balance = try await client.fetchBalance()
         let root = try loader.load()
@@ -131,4 +144,26 @@ final class PulseLedgerTests: XCTestCase {
         XCTAssertEqual(balance.amount, expected.amount)
         XCTAssertEqual(balance.currencyCode, expected.currencyCode)
     }
+
+    // MARK: - Auth keychain
+
+    func testAuthSessionStorePersistsPIN() throws {
+        let keychain = MockKeychain()
+        let session = AuthSessionStore(keychain: keychain)
+        session.pin = "1234"
+        session.isLoggedIn = true
+        XCTAssertEqual(session.pin, "1234")
+        XCTAssertTrue(session.isLoggedIn)
+        session.signOut()
+        XCTAssertNil(session.pin)
+        XCTAssertFalse(session.isLoggedIn)
+    }
+}
+
+private final class MockKeychain: KeychainStoring, @unchecked Sendable {
+    private var storage: [String: String] = [:]
+
+    func save(key: String, value: String) throws { storage[key] = value }
+    func load(key: String) throws -> String? { storage[key] }
+    func delete(key: String) throws { storage.removeValue(forKey: key) }
 }
