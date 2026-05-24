@@ -4,7 +4,7 @@ import SwiftUI
 struct PulseLedgerApp: App {
     var body: some Scene {
         WindowGroup {
-            DashboardView()
+            RootView()
         }
     }
 }
