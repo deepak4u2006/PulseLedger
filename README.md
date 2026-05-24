@@ -2,9 +2,7 @@
 
 ![iOS CI](https://github.com/deepak4u2006/PulseLedger/actions/workflows/ios.yml/badge.svg)
 
-Personal finance dashboard — Clean Architecture, **SwiftData** offline-first cache, MVVM.
-
-Revolut ships Core Data for the same goal: durable on-device state when the network is slow or unavailable. PulseLedger uses **SwiftData** with an **`actor TransactionRepository`** so reads/writes are serialized without blocking the main actor.
+Personal finance dashboard — mock API, staggered loading, **Combine** + **async/await**, MVVM.
 
 ## Architecture
 
@@ -13,43 +11,68 @@ flowchart TB
     subgraph presentation [Presentation]
         DV[DashboardView]
         DVM[DashboardViewModel]
+        SK[SkeletonView]
     end
     subgraph domain [Domain]
         M[Money / MoneyMath]
-        TR[TransactionRecord]
+        FC[FinanceCalculator]
+        T[Transaction]
     end
     subgraph data [Data]
-        AR["actor TransactionRepository"]
-        SD[(SwiftData ModelContext)]
+        JSON[(mock_data.json)]
+        MDL[MockDataLoader]
+        API[MockAPIClient]
+    end
+    subgraph services [Services]
+        NR[NetworkReachabilitySimulator]
     end
     DV --> DVM
-    DVM --> AR
-    AR --> SD
-    DVM --> M
-    AR --> TR
+    DVM --> API
+    DVM --> NR
+    API --> MDL
+    MDL --> JSON
+    DVM --> FC
+    FC --> T
+    DV --> SK
 ```
 
 | Layer | Responsibility |
 |-------|----------------|
-| Presentation | SwiftUI + `@MainActor` view models |
-| Domain | `Money`, transaction models |
-| Data | `actor` repository, SwiftData persistence |
+| Presentation | SwiftUI, skeletons, `@MainActor` view model |
+| Domain | `Transaction`, `FinanceCalculator` (balance, weekly spend) |
+| Data | DTOs, `MockDataLoader`, `MockAPIClient` (simulated endpoints) |
+| Services | Offline simulation (`Combine` publisher) |
+
+## Concurrency map
+
+| Concern | Technology |
+|---------|------------|
+| Simulated HTTP delay (balance, weekly, transaction start) | **async/await** (`Task.sleep`, `MockAPIClient`) |
+| Staggered transaction rows | **async/await** chunks + **Combine** `PassthroughSubject` → ViewModel sink |
+| Offline banner toggle | **Combine** (`$isOffline` → `isOfflinePublisher`) |
+| Parallel dashboard load | **async/await** `withTaskGroup` in `DashboardViewModel.load()` |
+| UI updates | **MainActor** (`@MainActor` view model, `.receive(on: DispatchQueue.main)`) |
+
+## Mock API behaviour
+
+- Single file: `PulseLedger/Resources/mock_data.json` (accounts, categories, transactions).
+- `MockDataLoader` decodes JSON once per call.
+- `MockAPIClient` exposes three logical endpoints, each with a **1–2s** random delay:
+  - `fetchBalance()` — computed from opening balance + all transactions
+  - `fetchWeeklySpend()` — debits in the last 7 days
+  - `streamTransactions(into:)` — emits **1–2** rows every **300–500ms** after initial delay
+- Pull-to-refresh re-runs all endpoints.
+- Toolbar menu: **Simulate offline** (blocks refresh/load).
 
 ## Run
 
-1. Open `PulseLedger.xcodeproj` in Xcode 15+
-2. Select an iPhone simulator → Run (⌘R)
+1. `xcodegen generate` (if you changed `project.yml`)
+2. Open `PulseLedger.xcodeproj` → iPhone simulator → Run (⌘R)
 3. Tests: ⌘U
-
-## Revolut-relevant signals
-
-- Offline-first persistence (SwiftData)
-- Swift Concurrency (`actor` repository)
-- Fintech-style dashboard UI with accessibility labels
 
 ## Built with
 
-Scaffolded with Cursor AI; architecture, concurrency patterns, and tests reviewed for clarity.
+Scaffolded with Cursor AI; mock API, loading UX, and tests reviewed for clarity.
 
 ---
 *Fintech-inspired UI — not affiliated with Revolut Ltd.*
