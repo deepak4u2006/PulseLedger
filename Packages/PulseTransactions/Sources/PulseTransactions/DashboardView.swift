@@ -6,12 +6,11 @@ import SwiftUI
 
 public struct DashboardView: View {
     @StateObject private var viewModel: DashboardViewModel
-    private let detailRouter: TransactionDetailRouter
     private let onSignOut: () -> Void
     private let onResetAppState: () -> Void
 
     @State private var showSettings = false
-    @State private var didHapticFirstRow = false
+    @State private var contentRevealOpacity: Double = 1
 
     public init(
         viewModel: DashboardViewModel,
@@ -20,7 +19,6 @@ public struct DashboardView: View {
         onResetAppState: @escaping () -> Void = {}
     ) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.detailRouter = detailRouter ?? TransactionDetailRouter()
         self.onSignOut = onSignOut
         self.onResetAppState = onResetAppState
     }
@@ -35,18 +33,14 @@ public struct DashboardView: View {
                         if viewModel.isOffline {
                             OfflineBanner()
                         }
-                        if !viewModel.accounts.isEmpty {
-                            MagneticCardCarousel(
-                                accounts: viewModel.accounts,
-                                selectedIndex: $viewModel.selectedCardIndex
-                            )
-                        }
+                        carouselSection
                         balanceCard
-                        chartSection
                         spendingSection
-                        transactionList
+                        chartSection
+                        transactionStackSection
                     }
                     .padding()
+                    .opacity(contentRevealOpacity)
                 }
                 .refreshable {
                     await viewModel.refresh()
@@ -88,9 +82,23 @@ public struct DashboardView: View {
             .sheet(isPresented: $showSettings) {
                 settingsSheet
             }
+            .fullScreenCover(isPresented: isTransactionHistoryPresented) {
+                TransactionHistoryView(
+                    viewModel: viewModel.stack,
+                    allTransactions: viewModel.transactions,
+                    onDismiss: { viewModel.stack.collapseToStack() }
+                )
+            }
             .task {
                 await viewModel.load()
                 await viewModel.notifications.refreshStatus()
+            }
+            .onChange(of: viewModel.isDashboardContentReady) { wasReady, ready in
+                guard ready, !wasReady else { return }
+                contentRevealOpacity = 0.92
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.86)) {
+                    contentRevealOpacity = 1
+                }
             }
             .alert("Enable payment alerts?", isPresented: $viewModel.showNotificationPrompt) {
                 Button("Enable") {
@@ -104,6 +112,28 @@ public struct DashboardView: View {
             }
         }
         .preferredColorScheme(.dark)
+    }
+
+    private var isTransactionHistoryPresented: Binding<Bool> {
+        Binding(
+            get: { viewModel.stack.mode == .history },
+            set: { presented in
+                if !presented {
+                    viewModel.stack.collapseToStack()
+                }
+            }
+        )
+    }
+
+    private var carouselSection: some View {
+        Group {
+            if !viewModel.accounts.isEmpty {
+                MagneticCardCarousel(
+                    accounts: viewModel.accounts,
+                    selectedIndex: $viewModel.selectedCardIndex
+                )
+            }
+        }
     }
 
     private var settingsSheet: some View {
@@ -158,7 +188,6 @@ public struct DashboardView: View {
                     .frame(height: 168)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: viewModel.isChartLoading)
     }
 
     private var balanceCard: some View {
@@ -181,7 +210,6 @@ public struct DashboardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: viewModel.isBalanceLoading)
     }
 
     private var spendingSection: some View {
@@ -206,68 +234,17 @@ public struct DashboardView: View {
                 }
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: viewModel.isWeeklyLoading)
     }
 
-    private var transactionList: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Recent")
-                .font(.headline)
-                .foregroundStyle(FintechTheme.textPrimary)
-
+    private var transactionStackSection: some View {
+        Group {
             if viewModel.isTransactionsLoading && viewModel.transactions.isEmpty {
                 ForEach(0 ..< 4, id: \.self) { _ in
                     TransactionRowSkeleton()
                 }
+            } else {
+                TransactionStackView(viewModel: viewModel.stack)
             }
-
-            ForEach(Array(viewModel.transactions.enumerated()), id: \.element.id) { index, tx in
-                NavigationLink {
-                    detailRouter.makeDetailView(
-                        transactionID: tx.id,
-                        transactions: viewModel.transactions
-                    )
-                } label: {
-                    transactionRow(tx)
-                }
-                .buttonStyle(.plain)
-                .transition(.asymmetric(
-                    insertion: .opacity.combined(with: .move(edge: .top)),
-                    removal: .opacity
-                ))
-                .onAppear {
-                    if index == 0, !didHapticFirstRow, !viewModel.isTransactionsLoading {
-                        didHapticFirstRow = true
-                        PulseHaptics.soft()
-                    }
-                }
-            }
-            .animation(.spring(response: 0.45, dampingFraction: 0.82), value: viewModel.transactions.count)
-        }
-        .onChange(of: viewModel.isTransactionsLoading) { _, loading in
-            if loading {
-                didHapticFirstRow = false
-            }
-        }
-    }
-
-    private func transactionRow(_ tx: PulseCore.Transaction) -> some View {
-        let money = Money(amount: tx.amount, currencyCode: tx.currencyCode)
-        return HStack {
-            VStack(alignment: .leading) {
-                Text(tx.title)
-                    .foregroundStyle(FintechTheme.textPrimary)
-                Text(tx.category)
-                    .font(.caption)
-                    .foregroundStyle(FintechTheme.textSecondary)
-            }
-            Spacer()
-            Text((tx.isDebit ? "-" : "+") + money.formatted)
-                .foregroundStyle(tx.isDebit ? FintechTheme.textPrimary : FintechTheme.accent)
-        }
-        .padding(.vertical, 8)
-        .overlay(alignment: .bottom) {
-            Divider().overlay(Color.white.opacity(0.1))
         }
     }
 }

@@ -19,6 +19,8 @@ public final class DashboardViewModel: ObservableObject {
     @Published public var selectedCardIndex = 0
     @Published public var showNotificationPrompt = false
 
+    public let stack = TransactionStackViewModel()
+
     public let reachability: NetworkReachabilityMonitor
     public let notifications: PaymentNotificationCenter
 
@@ -28,6 +30,13 @@ public final class DashboardViewModel: ObservableObject {
     private var loadTask: Task<Void, Never>?
     private var notifiedCreditIDs = Set<String>()
     private var isInitialStreamLoad = false
+    /// True when all dashboard loading flags have cleared.
+    public var isDashboardContentReady: Bool {
+        !isBalanceLoading
+            && !isWeeklyLoading
+            && !isTransactionsLoading
+            && !isChartLoading
+    }
 
     public init(
         api: TransactionAPIService = MockAPIClient(),
@@ -57,6 +66,7 @@ public final class DashboardViewModel: ObservableObject {
                 guard let self else { return }
                 guard !self.transactions.contains(where: { $0.id == transaction.id }) else { return }
                 self.transactions.append(transaction)
+                self.stack.sync(transactions: self.transactions)
                 if !self.isInitialStreamLoad {
                     self.refreshCategorySpend()
                 }
@@ -113,6 +123,7 @@ public final class DashboardViewModel: ObservableObject {
         loadTask?.cancel()
         transactions = []
         categorySpend = []
+        stack.sync(transactions: [])
         isBalanceLoading = true
         isWeeklyLoading = true
         isTransactionsLoading = true
@@ -130,6 +141,7 @@ public final class DashboardViewModel: ObservableObject {
             self.isInitialStreamLoad = false
             self.refreshCategorySpend()
             self.isChartLoading = false
+            self.stack.sync(transactions: self.transactions)
         }
         await loadTask?.value
     }
