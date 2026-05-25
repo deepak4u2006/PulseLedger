@@ -4,3 +4,7 @@ DerivedData/
 *.xcuserstate
 xcuserdata/
 .swiftpm/
+COMMIT-COMMANDS.sh
+COMMITS.md
+COMMITS-ANIMATIONS.md
+FIX-DASHBOARD.md

@@ -1,5 +1,7 @@
 # PulseLedger
 
+![iOS CI](https://github.com/deepak4u2006/PulseLedger/actions/workflows/ios.yml/badge.svg)
+
 Flagship portfolio host app showcasing iOS architecture patterns through local Swift packages and a full mock neobank user journey.
 
 ## Highlights
@@ -93,6 +95,20 @@ flowchart TB
 
 Only **[lottie-ios](https://github.com/airbnb/lottie-ios)** (via `PulseAuth`) for auth success animation.
 
+## Screenshots
+
+Placeholder images are included — replace with real Simulator captures (see [docs/screenshots/README.md](docs/screenshots/README.md)).
+
+| Dashboard | Auth flow |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Auth](docs/screenshots/auth.png) |
+
+| Transaction history | Detail |
+|---|---|
+| ![Transaction history](docs/screenshots/transaction-history.png) | ![Detail](docs/screenshots/detail.png) |
+
+**Screen recordings:** Simulator → **Record Screen** (or QuickTime) for demo clips in your profile README.
+
 ## Build
 
 ```bash
@@ -101,8 +117,11 @@ rm -rf Packages/*/.swiftpm
 
 xcodegen generate
 xcodebuild -project PulseLedger.xcodeproj -scheme PulseLedger \
-  -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.5' build
+  -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
+  CODE_SIGNING_ALLOWED=NO build
 ```
+
+CI uses `generic/platform=iOS Simulator` so the workflow does not depend on a specific simulator OS version on the runner.
 
 ## Sanity testing
 
@@ -155,16 +174,10 @@ The flat “Recent” list is replaced by a stacked card group (top 3–4 transa
 
 No `NavigationLink` push from home. `TransactionDetailTransitionView` uses VIP `Interactor` + `Presenter` for data and view-layer springs: ~40% hero header (amount, title, date), ~58% bottom detail sheet (category, type, reference). Presented via `.fullScreenCover` from `DashboardView`.
 
-Manual commit steps: see [COMMITS-ANIMATIONS.md](COMMITS-ANIMATIONS.md).
-
 ## Reset app state (testing)
 
 - **Settings → Reset app state** — clears Keychain + notification UserDefaults, returns to auth.
 - **DEBUG builds:** shake the device to reset instantly.
-
-## CI
-
-GitHub Actions workflow may need updating for local SPM packages and Lottie resolution — **fix pending**.
 
 ## Regenerate project
 

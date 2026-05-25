@@ -9,8 +9,18 @@ jobs:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: |
+          rm -rf Packages/*/.swiftpm
+          xcodegen generate
+      - name: Resolve Swift packages
+        run: |
+          xcodebuild -project PulseLedger.xcodeproj -scheme PulseLedger \
+            -resolvePackageDependencies
       - name: Build
         run: |
           xcodebuild -project PulseLedger.xcodeproj -scheme PulseLedger \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO build
