@@ -16,6 +16,7 @@ Flagship portfolio host app showcasing iOS architecture patterns through local S
 | **Notifications** | Local payment alerts on credits + test/simulate actions |
 | **UI** | UIKit category chart via `PulseBridge`, magnetic card carousel, Lottie success |
 | **Polish** | Balance count-up, card snap haptics, skeleton loaders |
+| **Motion** | Notification stack, balance count-up, chart, hero detail transition |
 
 ## User journey
 
@@ -138,7 +139,23 @@ xcodebuild -project PulseLedger.xcodeproj -scheme PulseLedger \
 
 ### Transaction detail
 
-Tap any row — detail should appear immediately (no artificial delay).
+Tap a transaction in the expanded stack or the top stacked card — a full-screen hero detail appears (header slides from top, sheet from bottom). Dismiss with back or swipe down on the bottom panel.
+
+## Motion & interactions
+
+### Home dashboard
+
+After mock API loading, skeletons swap to real content for carousel, balance (count-up), weekly spend, category chart, and transaction stack — all visible together. A short spring eases the whole block once (`isDashboardContentReady`); there is no per-section opacity gating.
+
+### Notification-style transaction stack
+
+The flat “Recent” list is replaced by a stacked card group (top 3–4 transactions, scale/offset/shadow). Tap the stack to expand into a full-screen overlay with infinite scroll (pages of 10, cycling `mock_data`). Swipe down on the drag handle or panel to collapse (light haptic on expand, soft on collapse). `matchedGeometryEffect` links stack cards to list rows where possible.
+
+### Custom transaction detail
+
+No `NavigationLink` push from home. `TransactionDetailTransitionView` uses VIP `Interactor` + `Presenter` for data and view-layer springs: ~40% hero header (amount, title, date), ~58% bottom detail sheet (category, type, reference). Presented via `.fullScreenCover` from `DashboardView`.
+
+Manual commit steps: see [COMMITS-ANIMATIONS.md](COMMITS-ANIMATIONS.md).
 
 ## Reset app state (testing)
 
