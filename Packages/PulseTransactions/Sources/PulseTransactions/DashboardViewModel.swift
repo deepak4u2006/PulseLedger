@@ -48,6 +48,17 @@ public final class DashboardViewModel: ObservableObject {
         self.notifications = notifications ?? PaymentNotificationCenter()
         bindOfflinePipeline()
         bindTransactionStream()
+        bindStackPresentation()
+    }
+
+    /// Forwards stack mode changes so `DashboardView` fullScreenCover bindings update.
+    private func bindStackPresentation() {
+        stack.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
 
     private func bindOfflinePipeline() {

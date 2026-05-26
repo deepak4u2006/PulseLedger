@@ -82,7 +82,10 @@ public struct DashboardView: View {
             .sheet(isPresented: $showSettings) {
                 settingsSheet
             }
-            .fullScreenCover(isPresented: isTransactionHistoryPresented) {
+            .fullScreenCover(
+                isPresented: isTransactionHistoryPresented,
+                onDismiss: { viewModel.stack.collapseToStack() }
+            ) {
                 TransactionHistoryView(
                     viewModel: viewModel.stack,
                     allTransactions: viewModel.transactions,
@@ -244,6 +247,7 @@ public struct DashboardView: View {
                 }
             } else {
                 TransactionStackView(viewModel: viewModel.stack)
+                    .zIndex(1)
             }
         }
     }

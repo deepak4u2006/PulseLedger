@@ -43,10 +43,12 @@ public struct TransactionStackView: View {
                         .allowsHitTesting(false)
                 }
             }
-            .frame(height: stackHeight(for: items.count))
+            .frame(maxWidth: .infinity, minHeight: 120, alignment: .top)
+            .frame(height: max(stackHeight(for: items.count), 120))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .zIndex(1)
         .accessibilityLabel("Recent transactions stack")
         .accessibilityHint("Double tap to open transaction history")
     }
@@ -81,6 +83,7 @@ public struct TransactionHistoryView: View {
     let allTransactions: [PulseCore.Transaction]
     let onDismiss: () -> Void
 
+    @Environment(\.dismiss) private var dismiss
     @State private var selectedTransaction: PulseCore.Transaction?
     @State private var dragOffset: CGFloat = 0
 
@@ -152,8 +155,9 @@ public struct TransactionHistoryView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .interactiveDismissDisabled(false)
+        .presentationDragIndicator(.visible)
         .offset(y: max(0, dragOffset))
-        .gesture(dismissDrag)
     }
 
     private var dragHandle: some View {
@@ -163,7 +167,9 @@ public struct TransactionHistoryView: View {
             .padding(.top, 8)
             .padding(.bottom, 4)
             .frame(maxWidth: .infinity)
+            .frame(height: 28)
             .contentShape(Rectangle())
+            .highPriorityGesture(dismissDrag)
     }
 
     private var dismissDrag: some Gesture {
@@ -186,8 +192,10 @@ public struct TransactionHistoryView: View {
 
     private func dismissHistory() {
         dragOffset = 0
-        Task { @MainActor in PulseHaptics.soft() }
+        viewModel.collapseToStack()
         onDismiss()
+        dismiss()
+        Task { @MainActor in PulseHaptics.soft() }
     }
 }
 
